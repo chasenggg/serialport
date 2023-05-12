@@ -1,0 +1,74 @@
+// See https://aka.ms/new-console-template for more information
+using System.IO.Ports;
+using System.IO;
+using System;
+
+Console.WriteLine("Hello, World!");
+private void button1_Click(object sender, EventArgs e)
+{
+    //SerialPort port = new SerialPort( ?COM1? , 9600, Parity.None, 8, StopBits.One);
+    try
+    {
+        if (this.serialPort1.IsOpen) this.serialPort1.Close();
+
+        this.serialPort1.PortName = this.comboBox1.SelectedItem.ToString();
+
+        //this.serialPort1.BaudRate = 460800;
+        //set up parameters of COM port
+        this.serialPort1.BaudRate = 115200;
+        this.serialPort1.Parity = Parity.None;
+        
+        /*
+        this.serialPort1.DataBits = 8;
+        this.serialPort1.StopBits = StopBits.One;
+        this.serialPort1.Handshake = Handshake.None;
+        */
+
+        // Set the read/write timeouts
+        this.serialPort1.ReadTimeout = 500;
+        this.serialPort1.WriteTimeout = 500;
+        //open COM port
+        this.serialPort1.Open();
+        //change status strip
+        this.statusStrip1.Items.Clear();
+        this.statusStrip1.Items.Add("Port " + this.serialPort1.PortName + " is open.");
+    }
+
+    catch (IOException er)
+    {
+        MessageBox.Show("Com port error " + er.Message);
+    }
+}
+
+==============================================================================================
+using System;
+using System.IO.Ports;
+
+
+namespace ATCommands
+{   
+    class Program
+    {
+        static void Main(string[] args)
+        {
+
+        // Create a new SerialPort object.
+        SerialPort port = new SerialPort("COM3", 115200);
+
+           // Open the port.
+            port.Open();
+
+            // Send an AT command.
+            port.Write("AT\r");
+
+            // Read the response.
+            string response = port.ReadLine();
+
+            // Display the response.
+            Console.WriteLine(response);
+
+            // Close the port.
+            port.Close();
+        }
+    }
+}
